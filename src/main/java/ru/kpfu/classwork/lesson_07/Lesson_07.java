@@ -3,6 +3,7 @@ package ru.kpfu.classwork.lesson_07;
 import java.util.Arrays;
 
 public class Lesson_07 {
+
     public static void main(String[] args) {
         double[] realNumbers = new double[5]; // from 0 to size - 1
 
@@ -29,7 +30,7 @@ public class Lesson_07 {
         boolean wasLastElementLess = false;
         for (int i = 0; i < numbers.length - 1; i++) {
             if (numbers[i] < numbers[i + 1]) {
-                if (!wasLastElementLess) count++;
+                if (!wasLastElementLess) count++; // wasLastElementLess == false
                 wasLastElementLess = true;
             } else {
                 wasLastElementLess = false;
@@ -62,9 +63,27 @@ public class Lesson_07 {
 
         System.out.println("Cicle left 2:");
         int k = 2;
-        for (int i = 0; i < arr1.length; i++) {
 
+        t = arr1[0];
+        for (int i = 1; i < arr1.length; i++) {
+            arr1[i - 1] = arr1[i];
         }
+        arr1[arr1.length-1] = t;
+        System.out.println("arr1 = " + Arrays.toString(arr1));
+
+        int[] arr3 = new int[arr1.length];
+        int j = 0;
+        for (int i = k; i < arr1.length; i++) {
+            arr3[j] = arr1[i];
+            j++;
+        }
+        for (int i = 0; i < k; i++) {
+            arr3[j] = arr1[i];
+            j++;
+        }
+        System.out.println("arr3 = " + Arrays.toString(arr3));
+
+
 
 
     }
