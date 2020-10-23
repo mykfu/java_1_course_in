@@ -59,11 +59,24 @@ public class Lesson_11 {
         // find A.A. Ivanov using regex
 
         String fio_re = "[A-Z]\\.\\s?[A-Z]\\.\\s[A-Z][a-z]*\\b";
-        //+7912332123
+        //+79123321233 asfd +78945656652
         //+7-123-123-23-33
 
+        String phone_re = "(?:\\+{0,1}\\d{1,2}\\s?\\(?-?\\d{3}[ \\-)]*)?\\d{3}[ -]*\\d{2}[ -]*\\d{2}";
 
+        String test = " .!  afdasdfas asfdsa   \t\t.....";
+        System.out.println(test.trim());
+        System.out.println(trim(test, " ."));
+        System.out.println(trim(test, " .!\t"));
+
+        String link_re = "<(\\w+)(?:[^>]*)(?:href\\s*=\\s*[\"']([^\"']*))[\"'](?:[^>]*)>\\s*(.*?)\\s*<\\/\\1>";
 
 
     }
+    public static String trim(String str, String remove) {
+        String pattern = "^[" + remove + "]*|[" + remove + "]*$";
+        return str.replaceAll(pattern, "");
+    }
+
+
 }
