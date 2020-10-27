@@ -70,7 +70,7 @@ public class Lesson_11 {
         System.out.println(trim(test, " .!\t"));
 
         String link_re = "<(\\w+)(?:[^>]*)(?:href\\s*=\\s*[\"']([^\"']*))[\"'](?:[^>]*)>\\s*(.*?)\\s*<\\/\\1>";
-
+        String latex_title_re = "\\\\title({((?:[^}{]++|(?1))++)})";
 
     }
     public static String trim(String str, String remove) {
