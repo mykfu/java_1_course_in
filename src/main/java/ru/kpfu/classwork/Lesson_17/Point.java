@@ -1,6 +1,6 @@
 package ru.kpfu.classwork.Lesson_17;
 
-public class Point implements PlateGeometricObject {
+public class Point implements PlateGeometricObject{
 
     protected double x;
     protected double y;

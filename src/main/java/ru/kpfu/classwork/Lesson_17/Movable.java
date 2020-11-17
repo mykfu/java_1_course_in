@@ -5,4 +5,8 @@ public interface Movable {
     void moveDown(double x);
     void moveLeft(double x);
     void moveRight(double x);
+
+    default void print(){
+        System.out.println("default print");
+    }
 }

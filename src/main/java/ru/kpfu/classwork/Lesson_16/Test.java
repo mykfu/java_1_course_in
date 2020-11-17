@@ -35,6 +35,11 @@ public class Test {
             }
 
             @Override
+            public double getPerimeter() {
+                return 0;
+            }
+
+            @Override
             public String toString() {
                 return "Anonymous class {" + getArea() + "}";
             }
@@ -42,6 +47,11 @@ public class Test {
         Figure[] figs = {new Circle(), new Cylinder(), new Triangle(), fig4, new Figure() {
             @Override
             public double getArea() {
+                return 0;
+            }
+
+            @Override
+            public double getPerimeter() {
                 return 0;
             }
 

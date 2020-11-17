@@ -15,6 +15,11 @@ public class Triangle extends Figure {
     }
 
     @Override
+    public double getPerimeter() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return null;
     }

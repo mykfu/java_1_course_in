@@ -54,6 +54,11 @@ public class Circle extends Figure {
         return Math.PI * radius * radius;
     }
 
+    @Override
+    public double getPerimeter() {
+        return 0;
+    }
+
     public double getLength() {
         return 2 * Math.PI * radius;
     }
