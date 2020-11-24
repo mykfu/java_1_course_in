@@ -31,10 +31,25 @@ public class PersonCSVDAO implements PersonDAO {
 
     @Override
     public boolean create(Person person) {
-        people[length] = person;
-        length++;
+        if (length >= MAX_ROWS && person != null) return false;
 
-        return false;
+        people[length] = person;
+        person.setId(getLastId());
+        length++;
+        return true ;
+    }
+
+    public Person create() throws Exception {
+        Person newOne = new Person();
+        if (create(newOne)) {
+            return newOne;
+        } else {
+            throw new Exception("Something wrong.");
+        }
+    }
+
+    private int getLastId() {
+        return 1 + people[length - 1].getId();
     }
 
     public boolean save() {
@@ -44,9 +59,32 @@ public class PersonCSVDAO implements PersonDAO {
     public boolean saveAs(String filename) {
         this.filename = filename;
 
-//        PrintWriter pw = new PrintWriter(new BufferedWriter(f))
+        try {
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
+            pw.println("SEP=" + separator);
 
-        return false;
+            String s = "";
+//            for (int i = 0; i < header.length; i++) {
+//                s = header[i] + (i < header.length - 1 ? separator : "");
+//            }
+            s = String.join(separator, header);
+            pw.println(s);
+            s = "";
+            for (int i = 0; i < length; i++) {
+                s = people[i].getId() + separator +
+                        people[i].getFirst_name() + separator +
+                        people[i].getLast_name() + separator +
+                        (people[i].isMale() ? "Male" : "Female") + separator +
+                        new SimpleDateFormat("dd.MM.yyyy").format(people[i].getBirthday()) + separator +
+                        (people[i].getAddress() != null ? people[i].getAddress() : "");
+                pw.println(s);
+            }
+            pw.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
@@ -108,6 +146,7 @@ public class PersonCSVDAO implements PersonDAO {
     public Person[] findBy(String what, String where) throws Exception {
         if (!is_header_exists(where)) throw new Exception("Header not found!");
         int counter = 0;
+
         for (int i = 0; i < length; i++) {
             if (people[i].getByRowName(where).equals(what)) {
                 counter++;
@@ -126,16 +165,17 @@ public class PersonCSVDAO implements PersonDAO {
     }
 
     @Override
-    public boolean update(Person updating) {
-
-
-
-        return false;
-    }
-
-    @Override
     public boolean delete(int id) {
-        return false;
+         return false;
     }
 
 }
+
+/*
+* 1 2 3 4 5
+* [2 3 4 5 null]
+* 1 -1 3 4 5
+* [3 null 4 5 null]
+* 1 -1 3 -1 5
+* [3 null 5]
+* */

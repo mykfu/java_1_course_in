@@ -22,6 +22,15 @@ public class Person {
         this.address = address;
     }
 
+    public Person() {
+
+    }
+
+    Person firstName(String file_name) {
+        setFirst_name(file_name);
+        return this;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -52,9 +61,9 @@ public class Person {
         return id;
     }
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirst_name() {
         return first_name;
@@ -72,7 +81,7 @@ public class Person {
         this.last_name = last_name;
     }
 
-    public boolean isGender() {
+    public boolean isMale() {
         return gender;
     }
 

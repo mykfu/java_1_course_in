@@ -10,7 +10,8 @@ public interface PersonDAO {
 
     Person[] findBy(String what, String where) throws Exception;
 
-    boolean update(Person updating);
+    boolean save();
+    boolean saveAs(String filename);
 
     boolean delete(int id);
 }
