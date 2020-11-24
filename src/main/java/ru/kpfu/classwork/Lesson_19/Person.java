@@ -30,13 +30,31 @@ public class Person {
         this.email = email;
     }
 
+    public String getByRowName(String where) {
+        switch (where) {
+            case "last_name":
+                return this.getLast_name();
+            case "first_name":
+                return this.getFirst_name();
+            case "gender":
+                return gender ? "Male" : "Female";
+            case "address":
+                return this.getAddress();
+            case "email":
+                return this.getEmail();
+            case "birthday":
+                return new SimpleDateFormat("dd.MM.yyyy").format(birthday);
+        }
+        return null;
+    }
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public String getFirst_name() {
         return first_name;

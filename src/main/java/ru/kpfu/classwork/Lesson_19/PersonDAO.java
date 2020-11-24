@@ -6,9 +6,11 @@ public interface PersonDAO {
 
     Person[] readAll();
 
-    Person read(int id);
+    Person read(int id) throws Exception;
 
-    boolean update(int id);
+    Person[] findBy(String what, String where) throws Exception;
+
+    boolean update(Person updating);
 
     boolean delete(int id);
 }

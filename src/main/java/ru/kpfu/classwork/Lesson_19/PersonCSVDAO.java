@@ -1,9 +1,6 @@
 package ru.kpfu.classwork.Lesson_19;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -11,8 +8,11 @@ import java.util.Arrays;
 public class PersonCSVDAO implements PersonDAO {
 
     public final int MAX_ROWS = 1000;
+
     private Person[] people;
+    private int length;
     private String separator = ",";
+    private String[] header;
 
     private String filename;
 
@@ -31,12 +31,27 @@ public class PersonCSVDAO implements PersonDAO {
 
     @Override
     public boolean create(Person person) {
+        people[length] = person;
+        length++;
+
         return false;
     }
 
+    public boolean save() {
+        return saveAs(filename);
+    }
+
+    public boolean saveAs(String filename) {
+        this.filename = filename;
+
+//        PrintWriter pw = new PrintWriter(new BufferedWriter(f))
+
+        return false;
+    }
+
+
+
     public Person[] readAll() {
-        String[] header = null;
-        int rows = 0;
         try {
             BufferedReader br = new BufferedReader(new FileReader(this.filename));
             String line = null;
@@ -55,35 +70,66 @@ public class PersonCSVDAO implements PersonDAO {
 
                 String[] row = line.split(separator, -1);
 
-                people[rows] = new Person(Integer.parseInt(row[0]), row[1], row[2], row[3], row[4].equals("Male"),
+                people[length] = new Person(Integer.parseInt(row[0]), row[1], row[2], row[3], row[4].equals("Male"),
                         new SimpleDateFormat("dd.MM.yyyy").parse(row[5]), row[6]);
-                rows++;
+                length++;
                 k++;
             }
-
-
-
-
-
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 
-        Person[] result = new Person[rows];
-        result = Arrays.copyOf(people, rows);
+        Person[] result = new Person[length];
+        result = Arrays.copyOf(people, length);
 
         return result;
     }
 
     @Override
-    public Person read(int id) {
+    public Person read(int id) throws Exception {
+        for (Person person : people) {
+            if (person.getId() == id)
+                return person;
+        }
+        throw new Exception("Person not found");
+    }
 
-        return null;
+    boolean is_header_exists(String where) {
+        for (String current : header) {
+            if (current.equals(where)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public boolean update(int id) {
+    public Person[] findBy(String what, String where) throws Exception {
+        if (!is_header_exists(where)) throw new Exception("Header not found!");
+        int counter = 0;
+        for (int i = 0; i < length; i++) {
+            if (people[i].getByRowName(where).equals(what)) {
+                counter++;
+            }
+        }
+        Person[] founded = new Person[counter];
+        int k = 0;
+        for (int i = 0; i < length; i++) {
+            if (people[i].getByRowName(where).equals(what)) {
+                founded[k] = people[i];
+                k++;
+            }
+        }
+
+        return founded;
+    }
+
+    @Override
+    public boolean update(Person updating) {
+
+
+
         return false;
     }
 
