@@ -8,19 +8,34 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
-public class PersonCSVDAO {
+public class PersonCSVDAO implements PersonDAO {
+
+    public final int MAX_ROWS = 1000;
+    private Person[] people;
+    private String separator = ",";
 
     private String filename;
 
     public PersonCSVDAO(String filename) {
         this.filename = filename;
+         people = new Person[MAX_ROWS];
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public Person[] getPeople() {
+        return people;
+    }
+
+    @Override
+    public boolean create(Person person) {
+        return false;
     }
 
     public Person[] readAll() {
-        String separator = ",";
         String[] header = null;
-        final int MAX_ROWS = 1000;
-        Person[] people = new Person[MAX_ROWS];
         int rows = 0;
         try {
             BufferedReader br = new BufferedReader(new FileReader(this.filename));
@@ -28,7 +43,7 @@ public class PersonCSVDAO {
             int k = 0;
             while ((line = br.readLine()) != null) {
                 if (line.matches("^SEP=.$") && k == 0) {
-                    separator = line.substring(line.length() - 2);
+                    separator = line.substring(line.length() - 1);
                     k++;
                     continue;
                 }
@@ -38,11 +53,10 @@ public class PersonCSVDAO {
                     continue;
                 }
 
-                String[] row = line.split(separator);
+                String[] row = line.split(separator, -1);
 
-                people[rows] = new Person(Integer.parseInt(row[0]), row[1], row[2], row[3].equals("Male"),
-                        new SimpleDateFormat("dd.MM.yyyy").parse(row[4]), row[5]);
-
+                people[rows] = new Person(Integer.parseInt(row[0]), row[1], row[2], row[3], row[4].equals("Male"),
+                        new SimpleDateFormat("dd.MM.yyyy").parse(row[5]), row[6]);
                 rows++;
                 k++;
             }
@@ -60,6 +74,22 @@ public class PersonCSVDAO {
         result = Arrays.copyOf(people, rows);
 
         return result;
+    }
+
+    @Override
+    public Person read(int id) {
+
+        return null;
+    }
+
+    @Override
+    public boolean update(int id) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(int id) {
+        return false;
     }
 
 }

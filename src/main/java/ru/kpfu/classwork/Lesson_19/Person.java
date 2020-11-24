@@ -1,31 +1,33 @@
 package ru.kpfu.classwork.Lesson_19;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Person {
     private int id;
     private String first_name;
     private String last_name;
+    private String email;
     private boolean gender;  // true if Male
     private Date birthday;
     private String address;
 
-    public Person(int id, String first_name, String last_name, boolean gender, Date birthday, String address) {
+    public Person(int id, String first_name, String last_name, String email, boolean gender, Date birthday, String address) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
+        this.email = email;
         this.gender = gender;
         this.birthday = birthday;
         this.address = address;
     }
 
-    public Person(int id, String first_name, String last_name, boolean gender, Date birthday) {
-        this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.gender = gender;
-        this.birthday = birthday;
-        address = "";
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getId() {
@@ -82,8 +84,8 @@ public class Person {
                 "id=" + id +
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
-                ", gender=" + gender +
-                ", birthday=" + birthday +
+                ", gender=" + (gender ? "Male" : "Female") +
+                ", birthday=" + new SimpleDateFormat("dd.MM.yyyy").format(birthday) +
                 ", address='" + address + '\'' +
                 '}';
     }
