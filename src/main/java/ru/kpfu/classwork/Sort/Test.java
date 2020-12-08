@@ -139,7 +139,10 @@ public class Test {
         System.out.println(Arrays.toString(arr));
         System.out.println(binarySearch(99, new int[]{9, 13, 13, 21, 32, 33, 37, 38, 90, 99}));
         System.out.println(Integer.MAX_VALUE / 2);
-        System.out.println(Integer.MAX_VALUE + Integer.MAX_VALUE / 2);
+
+        int[] arr2 = new int[Integer.MAX_VALUE - 2];
+        generateArray(arr2);
+        System.out.println(binarySearch(99, arr2));
     }
 
 }
