@@ -8,6 +8,21 @@ public class Test {
     private static String[] dictionary;
     private static String[] history;
     private static int historyLength = 0;
+    private static String[] queue;
+    private static int queueBegin = -1;
+    private static int queueEnd = -1;
+
+    private static boolean queueEmpty() {
+        return queueBegin == queueEnd;
+    }
+
+    private static String pop() {
+        return queue[++queueBegin];
+    }
+
+    private static void push(String add) {
+        queue[++queueEnd] = add;
+    }
 
     private static void readDictionary(String filename) throws IOException {
         File file = new File(filename);
@@ -16,8 +31,9 @@ public class Test {
         String line = null;
         int counter = 0;
 
-        dictionary = new String[(int) size];
-        history = new String[(int) size];
+        dictionary = new String[(int) size + 1];
+        history = new String[(int) size + 1];
+        queue = new String[(int) size + 1];
         int i = 0;
         while ((line = br.readLine()) != null) {
             dictionary[i++] = line;
@@ -105,12 +121,13 @@ public class Test {
 
     static boolean found = false;
 
-    private static void game(String begin, String end, String chain) {
+    private static void game(String begin, String end, String chain, int chainLength) {
         if (begin.equals(end)) {
             System.out.println(end);
             System.out.println("Found!");
             chain += end;
             System.out.println("Цепочка найдена: " + chain);
+            System.out.println("Размер цепочки = " + chainLength);
             found = true;
             return;
         }
@@ -118,19 +135,83 @@ public class Test {
         System.out.print(begin + ": ");
         String[] words = getWords(begin, end);
         if (words.length > 0) {
+            chainLength++;
             chain += begin + " - ";
         }
         System.out.println(Arrays.toString(words));
-
+        // sort words
+        // quickSortBySimilarity(end, words);
         for (int i = 0; i < words.length; i++) {
             if (found) return;
-            game(words[i], end, chain);
+            game(words[i], end, chain, chainLength);
         }
 
     }
 
     public static void game(String begin, String end) {
-        game(begin, end, "");
+        game(begin, end, "", 1);
+    }
+
+    static class Pair {
+        String parent;
+        String child;
+
+        public Pair(String parent, String child) {
+            this.parent = parent;
+            this.child = child;
+        }
+    }
+
+    private static void gameBFS(String begin, String end) {
+        push(begin);
+        history[historyLength++] = begin;
+
+        Pair[] pairs = new Pair[dictionary.length];
+        int pairsLength = 0;
+
+
+        while (!queueEmpty()) {
+            String current = pop();
+
+            if (current.equals(end)) {
+                System.out.println(end);
+                System.out.println("Found!");
+                String chain = "";
+
+                //n(n+1)/2 = O(n^2)
+
+                int chainLength = 1;
+                for (int i = 0; i < pairsLength && !current.equals(begin); i++) {
+                    if (pairs[i].child.equals(current)) {
+//                        chain += " - " + current;
+//                        chain = chain + " - " + current;
+                        chain = " - " + current + chain;
+                        chainLength++;
+                        current = pairs[i].parent;
+                        i = 0;
+                    }
+                }
+                chain = begin + chain;
+
+                System.out.println(chain);
+                System.out.println("chainLength = " + chainLength);
+
+//                chain += end;
+//                System.out.println("Цепочка найдена: " + chain);
+                return;
+            }
+
+            System.out.print(current + ": [");
+            for (String child : getWords(current, end)) {
+                System.out.print(" " + child);
+                push(child);
+                pairs[pairsLength++] = new Pair(current, child);
+            }
+            System.out.println("]");
+        }
+
+
+
     }
 
     public static void main(String[] args) {
@@ -141,14 +222,18 @@ public class Test {
 //        System.out.println(binarySearch("клён", test));
         // муха => слон
         // стук - сток - стон - слон
-        String begin = "стук";
-        String end = "слон";
+        String begin = "аист";
+        String end = "джип";
         try {
             readDictionary("src/main/java/ru/kpfu/classwork/ChainsGame/dict_len4.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Depth-First-Search:");
         game(begin, end);
+        historyLength = 0;
+//        System.out.println("Breadth-First-Search:");
+//        gameBFS(begin, end);
 
 
     }
